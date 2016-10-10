@@ -10,7 +10,7 @@ def insertInoDataBase():
 	try:
 		db = MySQLdb.connect(host = "localhost",user = "root",passwd="111111",db="toutiao", charset='utf8')
 		cursor = db.cursor()
-		Path = './user_info.txt'
+		Path = './invited_info_train.txt'
 		File = open(Path)
 		l =1
 		while True:
@@ -20,7 +20,7 @@ def insertInoDataBase():
 				insertRow = []
 				for item in line.split('\t'):
 					insertRow.append(item.strip())
-				insertSql = 'insert into userinfo values(%s,%s,%s,%s)'
+				insertSql = 'insert into invitedinfotrain values(%s,%s,%s)'
 				cursor.execute(insertSql,insertRow)
 				# if insertRow[0] =='000002':
 				# 	print insertRow
