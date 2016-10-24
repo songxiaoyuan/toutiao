@@ -29,7 +29,7 @@ class DataBase(object):
 		self.__DB__.close()
 
 	def getInvitedInfoTrain(self):
-		sql = 'select * from invitedinfotrain'
+		sql = 'select * from invitedinfo'
 		# print sql
 		self.__CURSOR__.execute(sql)
 		data = self.__CURSOR__.fetchall()
@@ -50,7 +50,7 @@ class DataBase(object):
 		return data
 
 	def getQuestionLabelFromId(self,questionId_):
-		getInfomation = ('label',questionId_)
+		getInfomation = ('questionlabel',questionId_)
 		sql = 'select %s from questioninfo where questionid = "%s" ' %getInfomation
 		# print sql
 		self.__CURSOR__.execute(sql)
@@ -58,7 +58,7 @@ class DataBase(object):
 		return data[0][0]
 
 	def getUserLabelFromId(self,userId_):
-		getInfomation = ('label',userId_)
+		getInfomation = ('userlabel',userId_)
 		sql = 'select %s from userinfo where userid = "%s" ' %getInfomation
 		# print sql
 		self.__CURSOR__.execute(sql)
