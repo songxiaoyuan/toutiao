@@ -40,10 +40,10 @@ def getQuestionLabelAndUserLabel():
 	for line in data:
 		isanswer = line[2]
 		if isanswer ==1:
-			questioninId = line[0]
+			questionId = line[0]
 			userId = line[1]
-			print questioninId
-			questionLabel = db.getQuestionLabelFromId(questioninId)
+			print questionId
+			questionLabel = db.getQuestionLabelFromId(questionId)
 			# print questionLabel
 			userLabel = db.getUserLabelFromId(userId).split('/')
 			# print userLabel
@@ -71,10 +71,10 @@ def getQuestionLabelAndUserLabelSet():
 	for line in data:
 		isanswer = line[2]
 		if isanswer ==1:
-			questioninId = line[0]
+			questionId = line[0]
 			userId = line[1]
-			# print questioninId
-			questionLabel = db.getQuestionLabelFromId(questioninId)
+			# print questionId
+			questionLabel = db.getQuestionLabelFromId(questionId)
 			# print questionLabel
 			# userLabel = db.getUserLabelFromId(userId).split('/')
 			# print userLabel
@@ -112,6 +112,69 @@ def lineChart(dataDic):
 	plt.plot(x,y)
 	plt.show()
 
+def writeLabelDicTotxt(labelDic):
+	for item in labelDic:
+		print item
+		fileName = item+'.txt'
+		data = labelDic[item]
+		f = open(fileName,'a')
+		for line in data:
+			# print line
+			line = map(str,line)
+			info = ','.join(line)
+			f.write(info+'\n')
+		f.close()
+
+def readLabelDic(fileName):
+	f = open(fileName,'r')
+	lines = f.readlines()
+	for line in lines:
+		print line
+
+
+def createLabelData():
+	db = dataBase.DataBase()
+	labelDic = dict()
+	data = db.getInvitedInfoTrain()
+	for line in data:
+		questionId = line[0]
+		userId = line[1]
+		isanswer = line[2]
+		print questionId
+		questionLabel = db.getQuestionLabelFromId(questionId)
+		if questionLabel not in labelDic:
+			labelDic[questionLabel] = []
+		userLabel = set(db.getUserLabelFromId(userId).split('/'))
+		# print userLabel
+		tmpUserLabel = set()
+		for item in userLabel:
+			item = int(item.encode('utf-8'))
+			tmpUserLabel.add(item)
+		tmparray = []
+		for x in range(244):
+			if x in tmpUserLabel:
+				tmparray.append(1)
+			else:
+				tmparray.append(0)
+		tmparray.append(int(isanswer))
+		labelDic[questionLabel].append(tmparray)
+		# labelDic[questionLabel]
+		# return labelDic
+	return labelDic
+
+def loadData(fileName):
+	f = open(fileName)
+	dataMat = []
+	for line in f.readlines():
+		line = line.strip().split(',')
+		line = map(int,line)
+		# curline = map(int(),line)
+		# print line
+		# print len(line)
+		dataMat.append(line)
+	return dataMat
+
+
 
 
 if __name__ == '__main__':
@@ -121,12 +184,12 @@ if __name__ == '__main__':
 	# f = open('labelDic.txt','wb')
 	# pickle.dump(labelDic,f)
 	# f.close()
-	f = open('labelDic.txt','rb')
-	data = pickle.load(f)
-	f.close()
-	for item in data:
-		print item
-		print data[item]
+	# f = open('labelDic.txt','rb')
+	# data = pickle.load(f)
+	# f.close()
+	# for item in data:
+	# 	print item
+	# 	print data[item]
 	# # print data[1]
 	# # lineChart(data[1])
 	# for item in data:
@@ -149,5 +212,9 @@ if __name__ == '__main__':
 	# for item in aprioriLabelDic:
 	# 	print item
 	# 	print aprioriLabelDic[item]
+	# labelDic = createLabelData()
+	# writeLabelDicTotxt(labelDic)
+	# readLabelzDic('./3.txt')
+	loadData('./data/3.txt')
 
 	
